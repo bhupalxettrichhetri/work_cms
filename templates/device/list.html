@@ -1,0 +1,313 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block content %}
+{% load decrypt_tags %}
+{% csrf_token %}
+
+
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-4">
+        
+        <div class="card-header pb-0">
+          <div class="d-flex align-items-center justify-content-between">
+              <p class="mb-0">Devices</p>
+              <div>
+                  <a class="btn btn-primary btn-sm" href="{% url 'dashboard:organization_detail' pk=organization_id %}">Back</a>
+                  <a class="btn btn-primary btn-sm" href="{% url 'dashboard:device_create' pk=organization_id %}">Create</a>
+              </div>
+          </div>
+      </div>
+        <div class="card-body px-0 pt-0 pb-2">
+          <div class="table-responsive p-0">
+            <table class="table align-items-center justify-content-center mb-0">
+              <thead>
+                <tr>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">ip address</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">vendor</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Firmware</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for device in devices %}
+                <tr>
+                  <td>
+                    
+                    <h6 class="mb-0 text-sm"><a href="{% url 'dashboard:device_detail' pk=device.pk %}">{{device.name}}</a></h6>
+                  </td>
+                  <td>
+                    <span class="text-xs font-weight-bold">{{device.ip_address}}</span>
+                  </td>
+                  <td>
+                    <span class="text-xs font-weight-bold">{{device.vendor}}</span>
+                  </td>
+                  <td>
+                    <span class="text-xs font-weight-bold">{{device.firmware_version}}</span>
+                  </td>
+                  
+                  <td class="align-middle">
+                      <a class="btn btn-info rounded-pill" href="{% url 'dashboard:device_edit' pk=device.id %}"><i
+                        class="fa fa-edit mr-2"></i>Edit</a>
+                      <a class="btn btn-danger rounded-pill delete_project"
+                        href="{% url 'dashboard:device_delete' pk=device.id %}"><i
+                             class="fa fa-trash mr-2"></i>Delete</a>
+                             {% if device.password and device.password.password %}
+                              {% comment %}
+                                <span class="text-xs font-weight-bold" ><a href="javascript:void(0)" alt="{{device.password.id }}" class="btn btn-info rounded-pill" id="postButton-{{device.password.id }}" onclick="handleClick(this)">Copy Password</a></span>
+                              {% endcomment %}
+                                <a href="javascript:void(0)"
+                                  class="btn btn-info rounded-pill"
+                                  data-password-id="{{ device.password.id }}"
+                                  onclick="openOtpModal(this)">
+                                  Copy Password
+                                </a>
+                              {% endif %}
+                  </td> 
+                </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="otpModal" tabindex="-1" aria-labelledby="otpModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="otpModalLabel">Enter OTP</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body text-center">
+        <div class="d-flex justify-content-center gap-2 mb-3" id="otp">
+          <input type="text" maxlength="1" class="otp-input form-control text-center" id="otp-1">
+          <input type="text" maxlength="1" class="otp-input form-control text-center" id="otp-2">
+          <input type="text" maxlength="1" class="otp-input form-control text-center" id="otp-3">
+          <input type="text" maxlength="1" class="otp-input form-control text-center" id="otp-4">
+          <input type="text" maxlength="1" class="otp-input form-control text-center" id="otp-5">
+          <input type="text" maxlength="1" class="otp-input form-control text-center" id="otp-6">
+        </div>
+        <input type="hidden" id="modal-password-id">
+        <div id="modal-error-msg" class="mt-2" style="display:none;"></div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" id="verify-otp-btn" class="btn btn-success">Verify</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block javascript %}
+<script>
+// Initialize modal
+const otpModalElement = document.getElementById('otpModal');
+const otpModal = new bootstrap.Modal(otpModalElement, { keyboard: false });
+const modalMessage = document.getElementById('modal-error-msg');
+const verifyBtn = document.getElementById('verify-otp-btn')
+
+
+const otpInputs = document.querySelectorAll('.otp-input');
+
+// const otpInputs = document.querySelectorAll('.otp-input');
+
+  // When modal is shown
+  otpModalElement.addEventListener('shown.bs.modal', () => {
+    // Clear all inputs
+    otpInputs.forEach(input => input.value = '');
+
+    // Focus first input
+    if (otpInputs.length > 0) {
+      otpInputs[0].focus();
+    }
+  });
+
+  otpInputs.forEach((input, index) => {
+    // Move to next on input
+    input.addEventListener('input', () => {
+      if (input.value && index < otpInputs.length - 1) {
+        otpInputs[index + 1].focus();
+      }
+    });
+
+    // Handle Backspace → move back
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && !input.value && index > 0) {
+        otpInputs[index - 1].focus();
+      }
+    });
+
+    // Handle paste (multi-digit)
+    input.addEventListener("paste", (e) => {
+      e.preventDefault();
+      const pasteData = (e.clipboardData || window.clipboardData).getData('text');
+      const digits = pasteData.replace(/\D/g, '').slice(0, otpInputs.length); // only digits, max input length
+
+      digits.split('').forEach((digit, i) => {
+        if (index + i < otpInputs.length) {
+          otpInputs[index + i].value = digit;
+        }
+      });
+
+      // Focus last filled input
+      const lastIndex = Math.min(index + digits.length, otpInputs.length - 1);
+      otpInputs[lastIndex].focus();
+    });
+  });
+
+function getOtpValue() {
+  let otp = '';
+  otpInputs.forEach(input => otp += input.value);
+  return otp;
+}
+// Helper: Clear all OTP inputs
+function clearOtpInputs() {
+  otpInputs.forEach(input => input.value = '');
+  otpInputs[0].focus();
+}
+// display none 
+function hideOtpInputs() {
+    $('#otp').addClass("d-none");
+    console.log('hide')
+}
+function showOtpInputs() {
+    $('#otp').removeClass("d-none");
+    console.log('unhide')
+}
+function InitializeModel(){
+  showOtpInputs();
+  modalMessage.style.display = 'none';
+}
+// function showLoader(){
+//   const loader = document.getElementById("loader");
+//     loader.classList.remove("hidden");
+//     loader.classList.add("show");
+//     // console.log('here loader')
+// }
+
+// Open modal and request OTP
+function openOtpModal(button) {
+    const passwordId = button.getAttribute("data-password-id");
+    document.getElementById('modal-password-id').value = passwordId;
+    InitializeModel();
+    // showLoader();
+    // const loader = document.getElementById("loader");
+    // loader.classList.add("show");
+    const data = new FormData();
+    data.append("password_id", passwordId);
+
+    fetch("{% url 'dashboard:ajax-post' %}", {
+        method: "POST",
+        body: data,
+        headers: { "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value }
+    })
+    .then(async (response) => {
+        if (!response.ok) {
+            let errorData;
+            try { errorData = await response.json(); } catch(e) {}
+            throw new Error(errorData?.error || `Server returned status ${response.status}`);
+        }
+        return response.json();
+    })
+    .then((data) => {
+        if (data.otp_required) {
+            // const loader = document.getElementById("loader");
+            // loader.classList.add("hidden");
+            otpModal.show(); // Show the modal
+        } else if (data.error) {
+            alert(data.error);
+        }
+    })
+    .catch((error) => {
+        console.error(error);
+        loader.classList.add("hidden");
+        alert(error.message || "Failed to generate OTP.");
+    });
+}
+
+// Verify OTP button click
+document.getElementById('verify-otp-btn').addEventListener('click', function() {
+    // const passwordId = document.getElementById('modal-password-id').value;
+    // const otp = getOtpValue();
+    // const errorMsg = document.getElementById('modal-error-msg');
+
+    // if (!otp) {
+    //     errorMsg.textContent = "Please enter OTP!";
+    //     errorMsg.style.display = "block";
+    //     return;
+    // }
+
+    const passwordId = document.getElementById('modal-password-id').value;
+        const otp = getOtpValue();
+
+        modalMessage.style.display = 'none';
+        modalMessage.textContent = '';
+        modalMessage.classList.remove('text-success', 'text-danger');
+        // verifyBtn.disabled = true;
+
+        if (otp.length < 6) {
+            modalMessage.textContent = "Please enter the 6-digit OTP!";
+            modalMessage.classList.add('text-danger');
+            modalMessage.style.display = 'block';
+            // verifyBtn.disabled = false;
+            return;
+        }
+
+    const data = new FormData();
+    data.append("otp", otp);
+    data.append("password_id", passwordId);
+
+    fetch("{% url 'dashboard:verify-otp' %}", {
+        method: "POST",
+        body: data,
+        headers: { "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value }
+    })
+    .then(async (response) => {
+        if (!response.ok) {
+            let errorData;
+            try { errorData = await response.json(); } catch(e) {}
+            throw new Error(errorData?.error || `Server returned status ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+            if (data.password) {
+                navigator.clipboard.writeText(data.password).then(() => {
+                    modalMessage.textContent = "Password copied to clipboard!";
+                    clearOtpInputs();
+                    hideOtpInputs();
+                    $("#otp").hide();
+                    modalMessage.classList.add('text-success');
+                    modalMessage.style.display = 'block';
+                    setTimeout(() => {
+                        otpModal.hide();
+                        verifyBtn.disabled = false;
+                    }, 500);
+                });
+            } else if (data.error) {
+                modalMessage.textContent = data.error;
+                modalMessage.classList.add('text-danger');
+                modalMessage.style.display = 'block';
+                verifyBtn.disabled = false;
+            }
+        })
+    .catch(error => {
+            console.error(error);
+            modalMessage.textContent = error.message || "OTP verification failed.";
+            clearOtpInputs();
+            modalMessage.classList.add('text-danger');
+            modalMessage.style.display = 'block';
+            verifyBtn.disabled = false;
+        });
+});
+
+</script>
+{% endblock %}

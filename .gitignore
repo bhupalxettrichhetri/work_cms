@@ -1,0 +1,33 @@
+# Python
+*.pyc
+__pycache__/
+
+# Django database (local dev)
+db.sqlite3
+
+# Django media files
+media/
+
+# Django collected static files
+static-files/
+
+# Django migration files (optional)
+*/migrations/*
+!*/migrations/__init__.py
+
+# Virtual environment
+env/
+venv/
+
+# VS Code
+.vscode/
+.history/
+*.code-workspace
+*~
+*.tmp
+*.swp
+*.swo
+
+# OS specific
+.DS_Store
+Thumbs.db

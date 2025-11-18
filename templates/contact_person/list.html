@@ -1,0 +1,65 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block content %}
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-4">
+        
+        <div class="card-header pb-0">
+          <div class="d-flex align-items-center justify-content-between">
+              <p class="mb-0">Contacts</p>
+              <div>
+                  <a class="btn btn-primary btn-sm" href="{% url 'dashboard:organization_detail' pk=organization_id %}">Back</a>
+                  <a class="btn btn-primary btn-sm" href="{% url 'dashboard:contact_person_create' pk=organization_id %}">Create</a>
+              </div>
+          </div>
+      </div>
+        <div class="card-body px-0 pt-0 pb-2">
+          <div class="table-responsive p-0">
+            <table class="table align-items-center justify-content-center mb-0">
+              <thead>
+                <tr>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">FirstName</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Last Name</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Phone Number</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Email</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for contact in contacts %}
+                <tr>
+                  
+                  <td>
+                    <p class="text-sm font-weight-bold mb-0">{{contact.first_name}}</p>
+                  </td>
+                  <td>
+                    <span class="text-xs font-weight-bold">{{contact.last_name}}</span>
+                  </td>
+                  <td>
+                    <span class="text-xs font-weight-bold">{{contact.phone_number}}</span>
+                  </td>
+                  <td>
+                    <span class="text-xs font-weight-bold">{{contact.email}}</span>
+                  </td>
+                  
+                  <td class="align-middle">
+                      <a class="btn btn-info rounded-pill" href="{% url 'dashboard:contact_person_edit' pk=contact.id %}"><i
+                        class="fa fa-edit mr-2"></i>Edit</a>
+                      <a class="btn btn-danger rounded-pill delete_project"
+                        href="{% url 'dashboard:contact_person_delete' pk=contact.id %}"><i
+                             class="fa fa-trash mr-2"></i>Delete</a>
+                  </td> 
+                </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

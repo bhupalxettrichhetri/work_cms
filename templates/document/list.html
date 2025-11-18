@@ -1,0 +1,131 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block content %}
+{% load filename_filters %}
+{% csrf_token %}
+
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-4">
+        
+        <div class="card-header pb-0">
+          <div class="d-flex align-items-center justify-content-between">
+              <p class="mb-0">Documents</p>
+              <div>
+                  <a class="btn btn-primary btn-sm" href="{% url 'dashboard:organization_detail' pk=organization_id %}">Back</a>
+                  <a class="btn btn-primary btn-sm" href="{% url 'dashboard:device_create' pk=organization_id %}">Create</a>
+              </div>
+          </div>
+      </div>
+        <div class="card-body px-0 pt-0 pb-2">
+          <div class="table-responsive p-0">
+            <table class="table align-items-center justify-content-center mb-0">
+              <thead>
+                <tr>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">ip address</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">vendor</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Firmware</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for doc in documents %}
+                  {% for d in doc.directory_name.all %}
+                  <tr>
+                    <td>
+                      
+                      <h6 class="mb-0 text-sm"><a href="#">{{d.name}}</a></h6>
+                    </td>
+                    <td>
+                      <span class="text-xs font-weight-bold"><a href="{{d.file.url}}">{{ d.file.name|basename }}</a></span>
+                    </td>
+                    <td>
+                      <span class="text-xs font-weight-bold">{{device.vendor}}</span>
+                    </td>
+                    <td>
+                      <span class="text-xs font-weight-bold">{{device.firmware_version}}</span>
+                    </td>
+                    
+                    <td class="align-middle">
+                      
+                    </td> 
+                  </td>
+                  </tr>
+                  {% endfor %}
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block javascript %}
+<script>
+//   document.querySelector("#postButton").addEventListener("click", function() {
+//     // Get the `alt` attribute value
+//     const passwordId = this.getAttribute("alt");
+//     alert(passwordId)
+
+//     // Prepare the data to send in the POST request
+//     const data = new FormData();
+//     data.append("password_id", passwordId);
+//     const url = "{% url 'dashboard:ajax-post' %}";
+//     alert (url)
+//     // Send the AJAX POST request
+//     fetch(url, {
+//         method: "POST",
+//         body: data,
+//         headers: {
+//             "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value // Include CSRF token
+//         }
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//         // Display the response message
+//         // document.querySelector("#response").innerText = data.message;
+//         console.log(data.message)
+//     })
+//     .catch(error => console.error("Error:", error));
+// });
+function handleClick($th) {
+        const $this = $th
+        const passwordId = $th.getAttribute("alt"); // Get the alt attribute value
+        const data = new FormData();
+        data.append("password_id", passwordId);
+        const url = "{% url 'dashboard:ajax-post' %}";
+
+        // Make the AJAX request
+        fetch(url, {
+            method: "POST",
+            body: data,
+            headers: {
+                "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value, // CSRF token
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                // Display the server response in the #response element
+                const responseMessage = data.message;
+                // document.querySelector("#response").innerText = responseMessage;
+
+                // Copy the response message to the clipboard
+                navigator.clipboard.writeText(responseMessage)
+                    .then(() => {
+                        // alert("Response successfully copied to clipboard!"); // Notify the user
+                        $th.textContent = "Copied";
+                        $th.classList.add("disabled");
+                    })
+                    .catch((err) => {
+                        console.error("Failed to copy text:", err); // Handle clipboard errors
+                    });
+            })
+            .catch((error) => console.error("Error:", error));
+}
+
+</script>
+{% endblock %}

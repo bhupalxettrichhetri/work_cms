@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="apple-touch-icon" sizes="76x76" href="{% static 'argon/img/apple-icon.png' %}">
+  <link rel="icon" type="image/png" href="{% static 'argon/' %}img/favicon.png">
+  <title>
+    Argon Dashboard 2 by Creative Tim
+  </title>
+  <!--     Fonts and icons     -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+  <!-- Nucleo Icons -->
+  <link href="{% static 'argon/' %}css/nucleo-icons.css" rel="stylesheet" />
+  <link href="{% static 'argon/' %}css/nucleo-svg.css" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  
+  <link href="{% static 'argon/' %}css/nucleo-svg.css" rel="stylesheet" />
+  <!-- CSS Files -->
+  <link id="pagestyle" href="{% static 'argon/' %}css/argon-dashboard.css?v=2.0.4" rel="stylesheet" />
+  <link href="{%  static 'autocomplete_light/select2.css' %}" rel="stylesheet" />
+
+  <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+
+
+  <!-- {%  static 'autocomplete_light/select2.css' %} -->
+  <style>
+    .sticky-alert {
+    position: fixed;
+    top: 50px; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Adjust position to truly center */
+    width: auto; /* Adjust width to fit content */
+    max-width: 300px; /* Optional: Limit the width */
+    z-index: 1050; /* Ensure it stays above other content */
+    }
+</style>
+</head>
+<body class="g-sidenav-show   bg-gray-100">
+    <div class="min-height-300 bg-primary position-absolute w-100"></div>
+    <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 " id="sidenav-main">
+        {% include 'dashboard/sidebar.html' %}
+    </aside>
+    <main class="main-content position-relative border-radius-lg ">
+        {% include 'dashboard/navbar.html' %}
+
+        <div class="container-fluid py-4">
+          {% if messages %}
+            <div id="messages">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} sticky-alert" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+          {% endif %}
+            {% block content %} {% endblock %}
+        {% include 'dashboard/footer.html' %}    
+        </div>
+    </main>
+
+    <!--   Core JS Files   -->
+  <script src="{% static 'argon/' %}js/core/popper.min.js"></script>
+  <script src="{% static 'argon/' %}js/core/bootstrap.min.js"></script>
+  <script src="{% static 'argon/' %}js/plugins/perfect-scrollbar.min.js"></script>
+  <script src="{% static 'argon/' %}js/plugins/smooth-scrollbar.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script>
+    $(document).ready(function(){
+        // Auto-close alerts after 5 seconds
+        setTimeout(function() {
+            $(".sticky-alert").slideUp(500, function(){
+                $(this).remove(); 
+            });
+        }, 1000); // Adjust time as needed
+    });
+</script>
+  <script>
+    var win = navigator.platform.indexOf('Win') > -1;
+    if (win && document.querySelector('#sidenav-scrollbar')) {
+      var options = {
+        damping: '0.5'
+      }
+      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
+  </script>
+  <!-- Github buttons -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="{% static 'argon/' %}js/argon-dashboard.min.js?v=2.0.4"></script>
+  <!-- Cloudflare Web Analytics -->
+   <!-- <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "daa06f69a3e24536a6fc159403842f20"}'></script> -->
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+   <!-- End Cloudflare Web Analytics -->
+  {% block javascript %} {% endblock %}
+</body>
+
+</html>
+        

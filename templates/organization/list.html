@@ -1,0 +1,60 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block content %}
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-4">
+        
+        <div class="card-header pb-0">
+          <div class="d-flex align-items-center">
+          <p class="mb-0">Organizations</p>
+          <a class="btn btn-primary btn-sm ms-auto" href="{% url 'dashboard:organization_create' %}">Create</a>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2">
+          <div class="table-responsive p-0">
+            <table class="table align-items-center justify-content-center mb-0">
+              <thead>
+                <tr>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Address</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Email</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for organization in organizations %}
+                <tr>
+                  <td>
+                    <div class="d-flex px-2">
+                      <div class="my-auto">
+                        <h6 class="mb-0 text-sm"><a href="{% url 'dashboard:organization_detail' pk=organization.pk %}">{{organization.name}}</a></h6>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <p class="text-sm font-weight-bold mb-0">{{organization.address}}</p>
+                  </td>
+                  <td>
+                    <span class="text-xs font-weight-bold">{{organization.email}}</span>
+                  </td>
+                  
+                  <td class="align-middle">
+                      <a class="btn btn-info rounded-pill" href="{% url 'dashboard:organization_edit' pk=organization.pk %}"><i
+                        class="fa fa-edit mr-2"></i>Edit</a>
+                      <a class="btn btn-danger rounded-pill delete_project"
+                        href="{% url 'dashboard:organization_delete' pk=organization.pk %}"><i
+                             class="fa fa-trash mr-2"></i>Delete</a>
+                  </td> 
+                </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,129 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="apple-touch-icon" sizes="76x76" href="{% static 'argon/img/apple-icon.png' %}">
+  <link rel="icon" type="image/png" href="{% static 'argon/' %}img/favicon.png">
+  <title>Argon Dashboard 2 by Creative Tim</title>
+
+  <!-- Fonts and icons -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+  <link href="{% static 'argon/' %}css/nucleo-icons.css" rel="stylesheet" />
+  <link href="{% static 'argon/' %}css/nucleo-svg.css" rel="stylesheet" />
+  <link id="pagestyle" href="{% static 'argon/' %}css/argon-dashboard.css?v=2.0.4" rel="stylesheet" />
+  <link href="{%  static 'autocomplete_light/select2.css' %}" rel="stylesheet" />
+
+  <style>
+    /* Sticky Alerts */
+    .sticky-alert {
+      position: fixed;
+      top: 50px;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: auto;
+      max-width: 300px;
+      z-index: 1050;
+    }
+
+    /* Loader Screen */
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #f8f9fa; /* Light background to match Argon */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      transition: opacity 0.5s ease;
+    }
+
+    #loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .spinner-border {
+      width: 4rem;
+      height: 4rem;
+      color: #5e72e4; /* Argon primary color */
+    }
+  </style>
+</head>
+
+<body class="g-sidenav-show bg-gray-100">
+  
+  <!-- Loader -->
+  <div id="loader">
+    <div class="spinner-border show" role="status">
+      <span class="visually-hidden">Loading...</span>
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Main Layout -->
+  <div class="min-height-300 bg-primary position-absolute w-100"></div>
+  <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 " id="sidenav-main">
+      {% include 'dashboard/sidebar.html' %}
+  </aside>
+  <main class="main-content position-relative border-radius-lg ">
+      {% include 'dashboard/navbar.html' %}
+
+      <div class="container-fluid py-4">
+        {% if messages %}
+          <div id="messages">
+              {% for message in messages %}
+                  <div class="alert alert-{{ message.tags }} sticky-alert" role="alert">
+                      {{ message }}
+                  </div>
+              {% endfor %}
+          </div>
+        {% endif %}
+        {% block content %} {% endblock %}
+      {% include 'dashboard/footer.html' %}    
+      </div>
+  </main>
+
+  <!-- Core JS Files -->
+  <script src="{% static 'argon/' %}js/core/popper.min.js"></script>
+  <script src="{% static 'argon/' %}js/core/bootstrap.min.js"></script>
+  <script src="{% static 'argon/' %}js/plugins/perfect-scrollbar.min.js"></script>
+  <script src="{% static 'argon/' %}js/plugins/smooth-scrollbar.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+  <script>
+    $(document).ready(function(){
+        // Auto-close alerts
+        setTimeout(function() {
+            $(".sticky-alert").slideUp(500, function(){
+                $(this).remove(); 
+            });
+        }, 1000);
+    });
+
+    // Hide loader once page fully loads
+    window.addEventListener("load", function() {
+      const loader = document.getElementById("loader");
+      loader.classList.add("hidden");
+    });
+  </script>
+
+  <script>
+    var win = navigator.platform.indexOf('Win') > -1;
+    if (win && document.querySelector('#sidenav-scrollbar')) {
+      var options = { damping: '0.5' }
+      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
+  </script>
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <script src="{% static 'argon/' %}js/argon-dashboard.min.js?v=2.0.4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  {% block javascript %} {% endblock %}
+</body>
+</html>
