@@ -51,7 +51,7 @@
             <div class="col-4 col-lg-4 order-lg-2">
               <div class="mt-n4 mt-lg-n6 mb-4 mb-lg-0">
                 <a href="javascript:;">
-                  <img src="{{profile_form.initial.profile_picture.url }}" class="rounded-circle img-fluid border border-2 border-white">
+                  <img src="{% if profile_form.initial.profile_picture %}{{profile_form.initial.profile_picture.url }} {% else %}{% static 'argon/' %}img\theme\tim.png{% endif %}" class="rounded-circle img-fluid border border-2 border-white">
                 </a>
               </div>
             </div>
