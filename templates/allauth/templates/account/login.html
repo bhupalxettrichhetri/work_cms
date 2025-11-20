@@ -14,8 +14,26 @@
   <link rel="stylesheet" href="{% static 'adminLTE/' %}plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="{% static 'adminLTE/' %}dist/css/adminlte.min.css">
+  <!-- Toastr -->
+  <link rel="stylesheet" href="{% static 'adminLTE/' %}plugins/toastr/toastr.min.css">
 </head>
 <body class="hold-transition login-page">
+{% for error in form.non_field_errors %}
+<div id="toast-container" class="toast-top-right">
+    <div class="toast toast-error" aria-live="polite" style="opacity: 0.710595;">
+        <div class="toast-message">{{error}}</div>
+    </div>
+</div>
+{% endfor %}
+{% if messages %}
+<div id="toast-container" class="toast-top-right">
+    {% for message in messages %}
+    <div class="toast toast-{{ message.tags }}" aria-live="polite" style="opacity: 0.710595;">
+        <div class="toast-message">{{ message }}</div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
 <div class="login-box">
   <div class="login-logo">
     <a href="{% static 'adminLTE/' %}index2.html"><b>Admin</b>LTE</a>
@@ -89,5 +107,24 @@
 <script src="{% static 'adminLTE/' %}plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="{% static 'adminLTE/' %}dist/js/adminlte.min.js"></script>
+<script>
+    function fadeOut(element, duration = 1000) {
+        if (!element) return;
+
+        element.style.transition = `opacity ${duration}ms ease`;
+        element.style.opacity = 0;
+
+        // remove or hide after fade
+        setTimeout(() => {
+            element.style.display = "none";
+        }, duration);
+    }
+
+    // Run after page loads
+    setTimeout(function () {
+        const toast = document.querySelector('#toast-container .toast');
+        fadeOut(toast, 1000); // fade out in 1 second
+    }, 5000); // wait 10 seconds
+</script>
 </body>
 </html>

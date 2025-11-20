@@ -26,8 +26,21 @@
   <link rel="stylesheet" href="{% static 'adminLTE/' %}plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="{% static 'adminLTE/' %}plugins/summernote/summernote-bs4.min.css">
+  <!-- Toastr -->
+  <link rel="stylesheet" href="{% static 'adminLTE/' %}plugins/toastr/toastr.min.css">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
+{% if messages %}
+<div id="toast-container" class="toast-top-right">
+    {% for message in messages %}
+    <div class="toast toast-{{ message.tags }}" aria-live="polite" style="opacity: 0.710595;">
+        <div class="toast-message">{{ message }}</div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+
 <div class="wrapper">
 
   <!-- Preloader -->
@@ -248,5 +261,25 @@
 <script src="{% static 'adminLTE/' %}dist/js/adminlte.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{% static 'adminLTE/' %}dist/js/demo.js"></script>
+
+<script>
+    function fadeOut(element, duration = 1000) {
+        if (!element) return;
+
+        element.style.transition = `opacity ${duration}ms ease`;
+        element.style.opacity = 0;
+
+        // remove or hide after fade
+        setTimeout(() => {
+            element.style.display = "none";
+        }, duration);
+    }
+
+    // Run after page loads
+    setTimeout(function () {
+        const toast = document.querySelector('#toast-container .toast');
+        fadeOut(toast, 1000); // fade out in 1 second
+    }, 2000); // wait 10 seconds
+</script>
 </body>
 </html>
