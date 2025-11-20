@@ -53,6 +53,28 @@
       height: 4rem;
       color: #5e72e4; /* Argon primary color */
     }
+    /* Close button inside sidebar, top right */
+    #sidebarClose {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: none; /* hide on desktop */
+    }
+
+    /* Show close button only on mobile */
+    @media (max-width: 1199.98px) {
+      #sidebarClose {
+        display: inline-block;
+      }
+    }
+    #sidenav-main.show {
+    transform: translateX(0);
+  }
+    
   </style>
 </head>
 
@@ -69,7 +91,8 @@
   <!-- Main Layout -->
   <div class="min-height-300 bg-primary position-absolute w-100"></div>
   <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 " id="sidenav-main">
-      {% include 'dashboard/sidebar.html' %}
+
+  {% include 'dashboard/sidebar.html' %}
   </aside>
   <main class="main-content position-relative border-radius-lg ">
       {% include 'dashboard/navbar.html' %}
@@ -119,6 +142,24 @@
       var options = { damping: '0.5' }
       Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
     }
+  </script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      sidebarToggle.addEventListener("click", function () {
+  if (window.innerWidth < 1200) {
+    sidebar.classList.toggle("show");
+  }
+});
+
+sidebarClose.addEventListener("click", function () {
+  if (window.innerWidth < 1200) {
+    sidebar.classList.remove("show");
+  }
+});
+});
+
+
+
   </script>
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <script src="{% static 'argon/' %}js/argon-dashboard.min.js?v=2.0.4"></script>
