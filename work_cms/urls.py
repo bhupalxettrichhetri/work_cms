@@ -17,14 +17,16 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from django.views.static import serve
 
-from dashboard.views import CustomPageNotFoundView
+from dashboard.views import CustomPageNotFoundView, MainPageView
 from . import settings
 from django.shortcuts import redirect
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
-    path('', lambda request: redirect('dashboard/', permanent=False)),
+    path("", MainPageView.as_view(), name="index"),
+    # path('', lambda request: redirect('dashboard/', permanent=False)),
+    # path('', lambda request: redirect('dashboard/', permanent=False)),
     path('__debug__/', include('debug_toolbar.urls')),
     path('dashboard/', include(("dashboard.urls", 'dashboard'), namespace="dashboard")),
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),

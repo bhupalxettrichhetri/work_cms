@@ -26,6 +26,9 @@ from dal import autocomplete
 from django.core.mail import send_mail
 
 
+class MainPageView(TemplateView):
+    template_name = 'dashboard/main_page.html'
+
 
 class VendorAutoComplete(autocomplete.Select2QuerySetView):
 
