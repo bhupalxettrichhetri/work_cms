@@ -1,0 +1,61 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header pb-0">
+                    <div class="d-flex align-items-center">
+                    <p class="mb-0">Create Organization</p>
+                    
+                </div>
+            </div>
+            <div class="card-body">
+              <form method="post">
+                {% csrf_token %}
+                {{form.errors}}
+                  <p class="text-uppercase text-sm">Organizarion Information</p>
+                  <div class="row">
+                  <div class="col-md-6">
+                      <div class="form-group">
+                      <label for="example-text-input" class="form-control-label">{{ form.name.label_tag }}</label>
+                      {{ form.name }}
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="form-group">
+                      <label for="example-text-input" class="form-control-label">{{ form.address.label_tag }}</label>
+                      {{ form.address }}
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="form-group">
+                      <label for="example-text-input" class="form-control-label">{{ form.email.label_tag }}</label>
+                      {{ form.email }}
+                      </div>
+                  </div>
+
+                  <hr class="horizontal dark">
+                  
+
+
+                </div>
+                  <div class="card-header pb-0">
+                    <div class="d-flex align-items-center">
+                    <p class="mb-0"></p>
+                    <input type='submit' class="btn btn-primary btn-sm ms-auto">
+                  </div>
+                </form>
+                        
+            </div>
+            <hr class="horizontal dark">
+                    
+          </div>
+        </div>  
+      </div>
+       
+    </div>
+  </div>
+</div>
+{% endblock %}

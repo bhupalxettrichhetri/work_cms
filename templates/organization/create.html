@@ -1,61 +1,75 @@
-{% extends 'dashboard/base.html' %}
+{% extends 'dashboard/adminLTE/base.html' %}
 {% load static %}
 {% block content %}
-<div class="container-fluid py-4">
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header pb-0">
-                    <div class="d-flex align-items-center">
-                    <p class="mb-0">Create Organization</p>
-                    
-                </div>
-            </div>
-            <div class="card-body">
-              <form method="post">
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>
+                {% if form.instance.pk %}
+                    Organization Edit
+                {% else %}
+                    Organization Add
+                {% endif %}
+            </h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Organization Add</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+    <form method="post">
                 {% csrf_token %}
                 {{form.errors}}
-                  <p class="text-uppercase text-sm">Organizarion Information</p>
-                  <div class="row">
-                  <div class="col-md-6">
-                      <div class="form-group">
-                      <label for="example-text-input" class="form-control-label">{{ form.name.label_tag }}</label>
-                      {{ form.name }}
-                      </div>
-                  </div>
-                  <div class="col-md-6">
-                      <div class="form-group">
-                      <label for="example-text-input" class="form-control-label">{{ form.address.label_tag }}</label>
-                      {{ form.address }}
-                      </div>
-                  </div>
-                  <div class="col-md-6">
-                      <div class="form-group">
-                      <label for="example-text-input" class="form-control-label">{{ form.email.label_tag }}</label>
-                      {{ form.email }}
-                      </div>
-                  </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card-primary">
+            <div class="card-header">
+              <h3 class="card-title">General</h3>
 
-                  <hr class="horizontal dark">
-                  
-
-
-                </div>
-                  <div class="card-header pb-0">
-                    <div class="d-flex align-items-center">
-                    <p class="mb-0"></p>
-                    <input type='submit' class="btn btn-primary btn-sm ms-auto">
-                  </div>
-                </form>
-                        
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+              </div>
             </div>
-            <hr class="horizontal dark">
-                    
+            <div class="card-body">
+              <div class="form-group">
+                <label for="inputName">{{ form.name.label_tag }}</label>
+                {{form.name}}
+              </div>
+              <div class="form-group">
+                <label for="inputName">{{ form.address.label_tag }}</label>
+                {{form.address}}
+              </div>
+              <div class="form-group">
+                <label for="inputName">{{ form.email.label_tag }}</label>
+                {{form.email}}
+              </div>
+            </div>
+            <!-- /.card-body -->
           </div>
-        </div>  
+          <!-- /.card -->
+        </div>
       </div>
-       
-    </div>
+      <div class="row">
+        <div class="col-12">
+          <!-- <a href="#" class="btn btn-secondary">Cancel</a> -->
+          <input type="submit" value="{% if form.instance.pk %}Edit{% else %}Create{% endif %}" 
+          class="btn btn-success float-left">
+        </div>
+      </div>
+    </form>
+    </section>
+    <!-- /.content -->
   </div>
-</div>
 {% endblock %}

@@ -7,12 +7,11 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Projects</h1>
+            <h1>Organizations</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Projects</li>
+              <li class="breadcrumb-item"><a class='btn btn-primary' href="{% url 'dashboard:organization_create' %}">Create</a></li></li>
             </ol>
           </div>
         </div>
@@ -24,18 +23,6 @@
 
       <!-- Default box -->
       <div class="card">
-        <div class="card-header">
-          <h3 class="card-title">Projects</h3>
-
-          <div class="card-tools">
-            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-              <i class="fas fa-minus"></i>
-            </button>
-            <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
-              <i class="fas fa-times"></i>
-            </button>
-          </div>
-        </div>
         <div class="card-body p-0">
           <table class="table table-striped projects">
               <thead>
@@ -46,13 +33,14 @@
                       <th style="width: 20%">
                           Name
                       </th>
-                      <th style="width: 30%">
+                      <th style="width: 40%">
                           Address
-                      </th>
+                      </th style="width: 40%">
                       <th>
                           Email
                       </th>
-                      <th style="width: 20%">
+                      <th style="width: 30%" class="float-right">
+                        Action
                       </th>
                   </tr>
               </thead>
@@ -80,22 +68,20 @@
                               Created 01.01.2019
                           </small> -->
                       </td>
-                      <td class="project-state">
+                      <td >
                           <span class="badge badge-success">{{organization.email}}</span>
                       </td>
                       <td class="project-actions text-right">
-                          <a class="btn btn-primary btn-sm" href="{% url 'dashboard:organization_detail' pk=organization.pk %}">
-                              <i class="fas fa-folder">
-                              </i>
-                              View
+                          <a type="button" class="btn btn-primary btn-sm" href="{% url 'dashboard:organization_detail' pk=organization.pk %}">
+                              <i class="fas fa-regular fa-eye"></i>
+                              
                           </a>
-                          <a class="btn btn-info btn-sm" href="{% url 'dashboard:organization_edit' pk=organization.pk %}">
+                          <a type="button" class="btn btn-info btn-sm" href="{% url 'dashboard:organization_edit' pk=organization.pk %}">
                               <i class="fas fa-pencil-alt">
                               </i>
-                              Edit
                           </a>
-                          <button type="button" class="btn btn-primary open-modal" data-toggle="modal" data-target="#exampleModalCenter" data-url="{% url 'dashboard:organization_delete' pk=organization.pk %}">
-                                Launch demo modal
+                          <button type="button " class="btn btn-danger btn-sm open-modal" data-toggle="modal" data-target="#exampleModalCenter" data-url="{% url 'dashboard:organization_delete' pk=organization.pk %}">
+                            <i class="fas fa-thin fa-trash"></i>
                             </button>
                           <!-- <a class="btn btn-danger btn-sm" href="#">
                               <i class="fas fa-trash">
