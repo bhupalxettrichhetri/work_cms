@@ -159,13 +159,10 @@ class OrganizationConatactPersonCreateView(LoginRequiredMixin,SuccessMessageMixi
     def get_success_url(self):
         return reverse_lazy('dashboard:contact_person_list', kwargs={'pk': self.kwargs['pk']})
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     if self.request.POST:
-    #         context['contact_persons_formset'] = ContactPersonFormSet(self.request.POST, instance=self.object)
-    #     else:
-    #         context['contact_persons_formset'] = ContactPersonFormSet(instance=self.object)
-    #     return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['organization_id'] = Organization.objects.get(pk=self.kwargs['pk'])
+        return context
 
     def form_valid(self, form):
         o_id = Organization.objects.get(pk=self.kwargs['pk'])
@@ -182,9 +179,7 @@ class OrganizationConatactPersonListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
-        context['organization_id'] = self.kwargs['pk']
-        # print(context)
+        context['organization_id'] = Organization.objects.get(pk=self.kwargs['pk'])
         return context
 
 class OrganizationConatactPersonDeleteView(LoginRequiredMixin, SuccessMessageMixin,DeleteView):
@@ -207,6 +202,7 @@ class OrganizationConatactPersonUpdateView(LoginRequiredMixin,SuccessMessageMixi
     def get_object(self, queryset=None):
         obj = ContactPerson.objects.get(pk=self.kwargs['pk'])
         return obj
+    
 
 class OrganizationDeviceListView(LoginRequiredMixin, ListView):
     model = Device
