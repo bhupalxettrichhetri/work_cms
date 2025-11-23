@@ -35,11 +35,11 @@
                       </th>
                       <th style="width: 40%">
                           Address
-                      </th style="width: 40%">
+                      </th>
                       <th>
                           Email
                       </th>
-                      <th style="width: 30%" class="float-right">
+                      <th style="width: 30%">
                         Action
                       </th>
                   </tr>
@@ -72,17 +72,17 @@
                           <span class="badge badge-success">{{organization.email}}</span>
                       </td>
                       <td class="project-actions text-right">
-                          <a type="button" class="btn btn-primary btn-sm" href="{% url 'dashboard:organization_detail' pk=organization.pk %}">
+                          <a type="button" class="mb-2 btn btn-primary btn-sm" href="{% url 'dashboard:organization_detail' pk=organization.pk %}">
                               <i class="fas fa-regular fa-eye"></i>
                               
                           </a>
-                          <a type="button" class="btn btn-info btn-sm" href="{% url 'dashboard:organization_edit' pk=organization.pk %}">
+                          <a type="button" class="mb-2 btn btn-info btn-sm" href="{% url 'dashboard:organization_edit' pk=organization.pk %}">
                               <i class="fas fa-pencil-alt">
                               </i>
                           </a>
-                          <button type="button " class="btn btn-danger btn-sm open-modal" data-toggle="modal" data-target="#exampleModalCenter" data-url="{% url 'dashboard:organization_delete' pk=organization.pk %}">
+                          <a type="button " class="mb-2 btn btn-danger btn-sm open-modal" data-toggle="modal" data-target="#exampleModalCenter" data-url="{% url 'dashboard:organization_delete' pk=organization.pk %}">
                             <i class="fas fa-thin fa-trash"></i>
-                            </button>
+                          </a>
                           <!-- <a class="btn btn-danger btn-sm" href="#">
                               <i class="fas fa-trash">
                               </i>
