@@ -133,11 +133,19 @@ class OrganizationUpdateView(LoginRequiredMixin,SuccessMessageMixin, UpdateView)
 #             formset.save()
 #         return response
 
-class OrganizationDeleteView(LoginRequiredMixin, SuccessMessageMixin,DeleteView):
+class OrganizationDeleteView(LoginRequiredMixin, View):
     model = Organization
     template_name = 'organization/delete.html'
     success_message = "Organization deleted successfully"
     success_url = reverse_lazy('dashboard:organization_list')  # Redirect to the organization list view after deletion
+
+    def post(self, request, pk):
+        organization = get_object_or_404(self.model, pk=pk)
+        organization.delete()
+        messages.success(request, self.success_message)
+        return redirect(self.success_url)  # Replace 'success_url' with the URL you want to redirect to
+
+
 
 class OrganizationDetailView(DetailView):
     model = Organization

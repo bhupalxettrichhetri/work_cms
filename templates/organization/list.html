@@ -105,7 +105,8 @@
 <div class="modal fade" id="exampleModalCenter" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-
+      <form method="post" action="" id="delete_entry">
+        {% csrf_token %}
       <div class="modal-header">
         <h5 class="modal-title">Confirm Delete</h5>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -118,8 +119,9 @@
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-danger" id="modalSubmitBtn">Delete</button>
+        <button type="submit" class="btn btn-danger" id="modalSubmitBtn">Delete</button>
       </div>
+      </form>
 
     </div>
   </div>
@@ -128,13 +130,7 @@
 <script>
 $(document).on('click', '.open-modal', function () {
     let url = $(this).data('url');   // get the value
-    alert(url)
-    $('#modalActionUrl').val(url);   // store inside modal
-});
-$('#modalSubmitBtn').on('click', function () {
-    let url = $('#modalActionUrl').val();
-    // alert(url)
-    window.location.href = url;      // send to server
+    $('#delete_entry').attr('action',url);   // store inside modal
 });
 
 </script>
