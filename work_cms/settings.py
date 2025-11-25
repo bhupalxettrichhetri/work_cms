@@ -162,7 +162,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_LOGOUT_ON_GET = True
-LOGOUT_REDIRECT_URL = "account_login"
+# LOGOUT_REDIRECT_URL = "account_login"
+LOGOUT_REDIRECT_URL = "index"
 LOGIN_REDIRECT_URL = "dashboard:dashboard"
 
 # ENCRYPTION_KEY = base64.urlsafe_b64encode(os.urandom(32))
