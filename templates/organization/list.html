@@ -76,9 +76,7 @@
                           #
                       </td>
                       <td>
-                          <a>
-                              {{organization.name}}
-                          </a>
+                          <a href="{% url 'dashboard:organization_detail' pk=organization.pk %}">{{organization.name}}</a>
                           <br/>
                           <!-- <small>
                               Created 01.01.2019
@@ -114,6 +112,8 @@
                               Delete
                           </a> -->
                       </td>
+                  </tr>
+                </a>
                     {% endfor %}
               </tbody>
           </table>
