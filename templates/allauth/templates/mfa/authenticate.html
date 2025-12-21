@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Two-Factor Authentication</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            background: #f4f6f9;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .mfa-card {
+            background: #fff;
+            width: 100%;
+            max-width: 420px;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,.08);
+            text-align: center;
+        }
+
+        .mfa-card h2 {
+            margin-bottom: 10px;
+            font-size: 22px;
+        }
+
+        .mfa-card p {
+            color: #6c757d;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            text-align: center;
+            letter-spacing: 6px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #0d6efd;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0b5ed7;
+        }
+
+        .help {
+            margin-top: 15px;
+            font-size: 13px;
+        }
+
+        .help a {
+            color: #0d6efd;
+            text-decoration: none;
+        }
+
+        .icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="mfa-card">
+    <div class="icon">🔐</div>
+
+    <h2>Two-Factor Authentication</h2>
+    <p>Enter the 6-digit code from your authenticator app bhupal</p>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {{ form.code }}
+
+        <button type="submit">Verify</button>
+    </form>
+
+    <div class="help">
+        {% comment %}
+        <a href="{% url 'mfa_recovery_codes' %}">Use recovery code</a>
+        {% endcomment %}
+    </div>
+</div>
+
+</body>
+</html>

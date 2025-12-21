@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-1fgik2k0xa*-+2@17ok09f&-#jmx-z@c4a^a-v+n@#izky9p*2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = 0
+DEBUG = 1
 
 ALLOWED_HOSTS = ['*']
 
@@ -57,6 +57,11 @@ INSTALLED_APPS = [
     'django.forms',
     # 'django_cryptography',
     'debug_toolbar',
+    ## mfa ##
+    "django_otp",
+    "django_otp.plugins.otp_totp",
+    "django_otp.plugins.otp_static",
+    "allauth.mfa",
     
 ]
 
@@ -66,12 +71,17 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     # Add the account middleware:
     "allauth.account.middleware.AccountMiddleware",
 ]
+MIDDLEWARE.insert(
+        MIDDLEWARE.index("django.contrib.auth.middleware.AuthenticationMiddleware") + 1,
+        "django_otp.middleware.OTPMiddleware",
+    )
 
 ROOT_URLCONF = 'work_cms.urls'
 
@@ -159,8 +169,10 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-ACCOUNT_AUTHENTICATION_METHOD = "email"
-ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_LOGIN_METHODS = {'email'}
+# ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_SIGNUP_FIELDS = ['email*','password1*', 'password2*']
 ACCOUNT_LOGOUT_ON_GET = True
 # LOGOUT_REDIRECT_URL = "account_login"
 LOGOUT_REDIRECT_URL = "index"
@@ -174,8 +186,8 @@ CSRF_TRUSTED_ORIGINS = [
 
 def show_toolbar(request):
     return True
-IME_PAY_URl = os.environ.get('IME_LIVE_URL', 'https://stg.imepay.com.np:7979/')
-IME_USER_NAME_PASSWORD = os.environ.get('IME_USER_NAME_PASSWORD', 'womencni:ime@1234')
+# IME_PAY_URl = os.environ.get('IME_LIVE_URL', 'https://stg.imepay.com.np:7979/')
+# IME_USER_NAME_PASSWORD = os.environ.get('IME_USER_NAME_PASSWORD', 'womencni:ime@1234')
 
 if DEBUG:
     DEBUG_TOOLBAR_CONFIG = {
