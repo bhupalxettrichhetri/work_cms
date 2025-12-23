@@ -149,6 +149,13 @@ USE_I18N = True
 TIME_ZONE = "Asia/Kathmandu"
 USE_TZ = True
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+        'LOCATION': '127.0.0.1:11211', # IP and port of the Memcached daemon
+    }
+}
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
