@@ -51,7 +51,61 @@
 
     <!-- Main content -->
     <section class="content">
+      <div class="card">
+                <!-- /.card-header -->
+                <div class="card-body table-responsive p-0">
+                  <table class="table table-hover text-nowrap">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Phone Number</th>
+                        <th>Email</th>
+                        <th class="float-right">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for contact in contacts %}
+                  <tr>
+                      <td>
+                          #
+                      </td>
+                      <td>
+                              {{contact.first_name|title}} {{contact.last_name|title}}
+                          <br/>
+                          <!-- <small>
+                              Created 01.01.2019
+                          </small> -->
+                      </td>
+                      <td >
+                          {{contact.phone_number|default_if_none:"N/a"}}
+                      </td>
+                      <td >
+                          {{contact.email}}
+                      </td>
+                      <td class="project-actions text-right">
+                          <a type="button" class="mb-2 btn btn-info btn-sm" href="{% url 'dashboard:contact_person_edit' pk=contact.id %}">
+                              <i class="fas fa-pencil-alt">
+                              </i>
+                          </a>
+                          <a type="button " class="mb-2 btn btn-danger btn-sm open-modal" data-toggle="modal" data-target="#exampleModalCenter" data-url="{% url 'dashboard:contact_person_delete' pk=contact.id %}">
+                            <i class="fas fa-thin fa-trash"></i>
+                          </a>
+                          <!-- <a class="btn btn-danger btn-sm" href="#">
+                              <i class="fas fa-trash">
+                              </i>
+                              Delete
+                          </a> -->
+                      </td>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.card-body -->
+      </div>
 
+
+      {% comment %}
       <!-- Default box -->
       <div class="card">
         <div class="card-body p-0">
@@ -115,6 +169,7 @@
         <!-- /.card-body -->
       </div>
       <!-- /.card -->
+       {% endcomment %}
 
     </section>
     <!-- /.content -->

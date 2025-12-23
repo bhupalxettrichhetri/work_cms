@@ -49,6 +49,82 @@
     <!-- Main content -->
     <section class="content">
 
+      <div class="card">
+                <!-- /.card-header -->
+                <div class="card-body table-responsive p-0">
+                  <table class="table table-hover text-nowrap">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>IP Address</th>
+                        <th>vendor</th>
+                        <th>Firmware</th>
+                        <th class="float-right">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for device in devices %}
+                  <tr>
+                      <td>
+                          #
+                      </td>
+                      <td>
+                              {{device.name}}
+                          <br/>
+                          <!-- <small>
+                              Created 01.01.2019
+                          </small> -->
+                      </td>
+                      <td>
+                              {{device.ip_address}}
+                          <br/>
+                          <!-- <small>
+                              Created 01.01.2019
+                          </small> -->
+                      </td>
+                      <td >
+                          {{device.vendor}}
+                      </td>
+                      <td >
+                          {{device.firmware_version}}
+                      </td>
+                      <td class="project-actions text-right">
+                          <a type="button" class="mb-2 btn btn-info btn-sm" href="{% url 'dashboard:device_edit' pk=device.id %}">
+                              <i class="fas fa-pencil-alt">
+                              </i>
+                          </a>
+                          <a type="button " class="mb-2 btn btn-danger btn-sm open-modal" data-toggle="modal" data-target="#exampleModalCenter" data-url="{% url 'dashboard:device_delete' pk=device.id %}"><i class="fas fa-thin fa-trash"></i></a>
+                          <a type="button" href="javascript:void(0)"
+                                class="mb-2 btn btn-info btn-sm"
+                                data-password-id="{{ device.password.id }}"
+                                onclick="openOtpModal(this)">
+                                Copy Password
+                              </a>
+                          </a>
+                          <!-- <a class="btn btn-danger btn-sm" href="#">
+                              <i class="fas fa-trash">
+                              </i>
+                              Delete
+                          </a> -->
+                      </td>
+                    {% endfor %}
+                      <!-- <tr>
+                        <td>183</td>
+                        <td>John Doe</td>
+                        <td>11-7-2014</td>
+                        <td><span class="tag tag-success">Approved</span></td>
+                        <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                      </tr> -->
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.card-body -->
+      </div>
+
+
+
+      {% comment %}
       <!-- Default box -->
       <div class="card">
         <div class="card-body p-0">
@@ -120,6 +196,7 @@
         <!-- /.card-body -->
       </div>
       <!-- /.card -->
+       {% endcomment %}
 
     </section>
     <!-- /.content -->
@@ -290,7 +367,7 @@ function hideLoader(){
 function openOtpModal(button) {
     const passwordId = button.getAttribute("data-password-id");
     document.getElementById('modal-password-id').value = passwordId;
-    alert('here')
+    // alert('here')
     InitializeModel();
     showLoader();
     // const loader = document.getElementById("loader");
