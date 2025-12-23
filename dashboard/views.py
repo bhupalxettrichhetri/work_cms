@@ -247,6 +247,7 @@ class OrganizationDeviceCreateView(LoginRequiredMixin, SuccessMessageMixin,View)
             'device_form': device_form,
             'password_form': password_form,
             'config_form': config_form,
+            'organization_id': self.kwargs['pk']
         })
 
     def post(self, request,pk):
@@ -287,7 +288,8 @@ class OrganizationDeviceCreateView(LoginRequiredMixin, SuccessMessageMixin,View)
             return render(request, self.template_name, {
                 'device_form': device_form,
                 'password_form': password_form,
-                'config_form': config_form
+                'config_form': config_form,
+                'organization_id': self.kwargs['pk']
             })
 
 
@@ -319,6 +321,7 @@ class OrganizationDeviceUpdateView(View):
             'password_form': password_form,
             'config_form': config_form,
             'device': device,
+            'organization_id': self.kwargs['pk']
         })
 
     def post(self, request, pk):
@@ -359,6 +362,7 @@ class OrganizationDeviceUpdateView(View):
             'device_form': device_form,
             'password_form': password_form,
             'device': device,
+            'organization_id': self.kwargs['pk']
         })
 
 
