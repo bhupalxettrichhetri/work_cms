@@ -452,7 +452,7 @@ document.getElementById('verify-otp-btn').addEventListener('click', function() {
     })
     .then(data => {
     if (data.password) {
-        alert(data)
+        console.log(data, data.password)
         navigator.clipboard.writeText(data.password)
             .then(() => {
                 hideOtpInputs();
