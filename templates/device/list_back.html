@@ -283,34 +283,58 @@ document.getElementById('verify-otp-btn').addEventListener('click', function() {
         return response.json();
     })
     .then(data => {
-            if (data.password) {
-                navigator.clipboard.writeText(data.password).then(() => {
-                    modalMessage.textContent = "Password copied to clipboard!";
-                    clearOtpInputs();
-                    hideOtpInputs();
-                    $("#otp").hide();
-                    modalMessage.classList.add('text-success');
-                    modalMessage.style.display = 'block';
-                    setTimeout(() => {
-                        otpModal.hide();
-                        verifyBtn.disabled = false;
-                    }, 500);
-                });
-            } else if (data.error) {
-                modalMessage.textContent = data.error;
+    if (data.password) {
+        navigator.clipboard.writeText(data.password)
+            .then(() => {
+                hideOtpInputs();
+                clearOtpInputs();
+
+                modalMessage.textContent = "Password copied to clipboard!";
+                modalMessage.classList.add('text-success');
+                modalMessage.style.display = 'block';
+
+                setTimeout(() => {
+                    otpModal.hide();
+                    verifyBtn.disabled = false;
+                }, 500);
+            })
+            .catch(err => {
+                console.error("Clipboard write failed:", err);
+                modalMessage.textContent = "Failed to copy password!";
                 modalMessage.classList.add('text-danger');
                 modalMessage.style.display = 'block';
-                verifyBtn.disabled = false;
-            }
-        })
-    .catch(error => {
-            console.error(error);
-            modalMessage.textContent = error.message || "OTP verification failed.";
-            clearOtpInputs();
-            modalMessage.classList.add('text-danger');
-            modalMessage.style.display = 'block';
-            verifyBtn.disabled = false;
-        });
+            });
+          }
+      });
+    // .then(data => {
+    //         if (data.password) {
+    //             navigator.clipboard.writeText(data.password).then(() => {
+    //                 modalMessage.textContent = "Password copied to clipboard!";
+    //                 clearOtpInputs();
+    //                 hideOtpInputs();
+    //                 $("#otp").hide();
+    //                 modalMessage.classList.add('text-success');
+    //                 modalMessage.style.display = 'block';
+    //                 setTimeout(() => {
+    //                     otpModal.hide();
+    //                     verifyBtn.disabled = false;
+    //                 }, 500);
+    //             });
+    //         } else if (data.error) {
+    //             modalMessage.textContent = data.error;
+    //             modalMessage.classList.add('text-danger');
+    //             modalMessage.style.display = 'block';
+    //             verifyBtn.disabled = false;
+    //         }
+    //     })
+    // .catch(error => {
+    //         console.error(error);
+    //         modalMessage.textContent = error.message || "OTP verification failed.";
+    //         clearOtpInputs();
+    //         modalMessage.classList.add('text-danger');
+    //         modalMessage.style.display = 'block';
+    //         verifyBtn.disabled = false;
+    //     });
 });
 
 </script>
