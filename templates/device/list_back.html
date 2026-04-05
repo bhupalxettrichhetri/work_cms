@@ -211,9 +211,13 @@ function openOtpModal(button) {
     })
     .then(async (response) => {
         if (!response.ok) {
+            console.log('error')
             let errorData;
             try { errorData = await response.json(); } catch(e) {}
             throw new Error(errorData?.error || `Server returned status ${response.status}`);
+        }
+        else{
+          console.log(response)
         }
         return response.json();
     })

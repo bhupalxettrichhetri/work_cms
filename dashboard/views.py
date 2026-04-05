@@ -437,7 +437,7 @@ class AjaxPostView(LoginRequiredMixin, View):
 
         # Generate OTP
         otp = str(random.randint(100000, 999999))
-        expires_at = timezone.now() + timedelta(minutes=5)
+        expires_at = timezone.now() + timedelta(minutes=1)
 
         PasswordOTP.objects.create(
             user=request.user,
@@ -448,7 +448,9 @@ class AjaxPostView(LoginRequiredMixin, View):
 
         # Send OTP email
 
-        send_otp_email.delay(request.user.email, otp, expires_at.strftime("%H:%M:%S"))
+        expiry_time_np = timezone.localtime(expires_at).strftime("%H:%M:%S")
+
+        send_otp_email.delay(request.user.email, otp, expiry_time_np)
         # send_mail(
         #     subject="Your OTP Code",
         #     message=f"Your OTP code is: {otp}. It will expire at {expires_at.strftime('%H:%M:%S')}.",
@@ -484,35 +486,34 @@ class VerifyOTPView(LoginRequiredMixin, View):
         print('post')
         otp_input = request.POST.get("otp")
         password_id = request.POST.get("password_id")
-        # otp_entry = PasswordOTP.objects.filter(
-        #         user=request.user,
-        #         device_password_id=password_id,
-        #         otp_code=otp_input,
-        #         is_used=False
-        #     ).latest('created_at')
-        # print(otp_entry)
-
         try:
-            otp_entry = PasswordOTP.objects.filter(
-                user=request.user,
-                device_password_id=password_id,
-                otp_code=otp_input,
-                is_used=False
-            ).latest('created_at')
-            print(otp_entry.is_expired())
+            otp_entry = (
+                PasswordOTP.objects
+                .filter(
+                    user=request.user,
+                    device_password_id=password_id,
+                    is_used=False,
+                    expires_at__gt=timezone.now()
+                )
+                .order_by("-created_at")
+                .first()
+            )
 
         except PasswordOTP.DoesNotExist:
-            print('error')
-            return JsonResponse({"error": "Invalid OTP"}, status=400)
+            print('error', "tested")
+            return JsonResponse({"error": "Invalid OTP", "password_id":password_id }, status=400)
 
-        if otp_entry.is_expired():
-            return JsonResponse({"error": "OTP expired"}, status=400)
+        # if otp_entry.is_expired():
+        #     return JsonResponse({"error": "OTP expired"}, status=400)
+        if not otp_entry or otp_entry.otp_code != otp_input:
+            # print(otp_entry.otp_code, otp_input)
+            return JsonResponse({"error": "Invalid or expired OTP"}, status=400)
+        else:
+            otp_entry.is_used = True
+            otp_entry.save()
 
-        otp_entry.is_used = True
-        otp_entry.save()
-
-        decrypted_pass = decrypt(otp_entry.device_password.password)
-        return JsonResponse({"password": decrypted_pass})
+            decrypted_pass = decrypt(otp_entry.device_password.password)
+            return JsonResponse({"password": decrypted_pass})
 
 
 class CustomPageNotFoundView(TemplateView):
