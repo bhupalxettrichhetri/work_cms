@@ -534,3 +534,23 @@ class CustomPageNotFoundView(TemplateView):
         context["message"] = "Oops! Looks like you're lost in space."
         context["stars"] = stars
         return self.render_to_response(context, status=404)
+    
+
+class CustomPermissionDeniedView(TemplateView):
+    template_name = "403.html"
+
+    # This is needed because handler404 passes `request` and `exception`
+    def get(self, request, exception=None, *args, **kwargs):
+        stars = []
+        for _ in range(20):  # 20 stars
+            stars.append({
+                "top": random.randint(0, 100),
+                "left": random.randint(0, 100),
+                "size": random.randint(2, 5),
+                "delay": round(random.uniform(0, 2), 2),
+            })
+        context = self.get_context_data(**kwargs)
+        context["title"] = "Unauthorized"
+        context["message"] = "Oops! You are unauthorized"
+        context["stars"] = stars
+        return self.render_to_response(context, status=404)

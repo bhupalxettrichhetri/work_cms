@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from django.views.static import serve
 
-from dashboard.views import CustomPageNotFoundView, MainPageView
+from dashboard.views import CustomPageNotFoundView, MainPageView, CustomPermissionDeniedView
 from . import settings
 from django.shortcuts import redirect
 
@@ -35,3 +35,4 @@ urlpatterns = [
 ]
 
 handler404 = CustomPageNotFoundView.as_view()
+handler404 = CustomPermissionDeniedView.as_view()
