@@ -15,4 +15,4 @@ class CustomAccountAdapter(DefaultAccountAdapter):
     def pre_login(self, request, user, **kwargs):
         # This runs before login is finalized
         if user.email not in ALLOWED_EMAILS:
-            raise PermissionDenied("Access denied: unauthorized email")
+            raise PermissionDenied("message: unauthorized email")
