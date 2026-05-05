@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-1fgik2k0xa*-+2@17ok09f&-#jmx-z@c4a^a-v+n@#izky9p*2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = 1
+DEBUG = 0
 
 ALLOWED_HOSTS = ['*']
 
@@ -184,6 +184,12 @@ ACCOUNT_LOGOUT_ON_GET = True
 # LOGOUT_REDIRECT_URL = "account_login"
 LOGOUT_REDIRECT_URL = "index"
 LOGIN_REDIRECT_URL = "dashboard:dashboard"
+ALLOWED_EMAILS = [
+    "bhupal.xettri@gmail.com",
+    "root@test.com",
+]
+
+ACCOUNT_ADAPTER = "work_cms.adapters.CustomAccountAdapter"
 
 # ENCRYPTION_KEY = base64.urlsafe_b64encode(os.urandom(32))
 ENCRYPT_KEY = b'fuR1WcBioNftoZMpYZ9h8ukduhiMeoFEdRXOs8GdJig='
